@@ -6,7 +6,7 @@
 /*   By: agiliber <agiliber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 14:00:12 by agiliber          #+#    #+#             */
-/*   Updated: 2024/11/07 14:46:37 by agiliber         ###   ########.fr       */
+/*   Updated: 2024/11/21 14:47:43 by agiliber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,16 @@ long	get_current_time_ms(void)
 	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
 
-void	print_output_message(t_input *input, int indiv, char *status)
+void	print_output_message(t_philo *data, int indiv, char *status)
 {
-	pthread_mutex_lock(&input->print_lock);
-	printf("%ld philosopher_%d %s\n", get_current_time_ms(), indiv, status);
-	pthread_mutex_unlock(&input->print_lock);
+	long	time;
+
+	if (dead_philo(data) == -1)
+		return ;
+	pthread_mutex_lock(&data->input->print_lock);
+	time = get_current_time_ms() - data->start_time;
+	printf("%ld %d %s\n", time, indiv, status);
+	pthread_mutex_unlock(&data->input->print_lock);
 }
 
 void	print_struct(t_input *input)
@@ -34,4 +39,24 @@ void	print_struct(t_input *input)
 	printf("input->time_eat : %d\n", input->time_eat);
 	printf("input->time_sleep : %d\n", input->time_sleep);
 	printf("input->nb_eat : %d\n", input->nb_eat);
+}
+
+void	print_dead(t_philo *data, int indiv, char *status)
+{
+	long	time;
+
+	pthread_mutex_lock(&data->input->print_lock);
+	time = get_current_time_ms() - data->start_time;
+	printf("%ld %d %s\n", time, indiv, status);
+	pthread_mutex_unlock(&data->input->print_lock);
+}
+
+void	print_all_eat(t_philo *data)
+{
+	long	time;
+
+	pthread_mutex_lock(&data->input->print_lock);
+	time = get_current_time_ms() - data->start_time;
+	printf("%ld %s\n", time, "All meals completed. Stopping simulation");
+	pthread_mutex_unlock(&data->input->print_lock);
 }

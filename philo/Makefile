@@ -6,7 +6,7 @@
 #    By: agiliber <agiliber@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/20 10:25:55 by agiliber          #+#    #+#              #
-#    Updated: 2024/11/06 14:55:20 by agiliber         ###   ########.fr        #
+#    Updated: 2024/11/15 15:18:24 by agiliber         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,6 @@
 # ------------------------------------------------------------------------------
 
 NAME = philo
-NAME_A = philo.a
 
 # ------------------------------------------------------------------------------
 # 								COMPILATION
@@ -47,7 +46,8 @@ DEP_DIR = dep/
 # 									FILES
 # ------------------------------------------------------------------------------
 
-SRC = ft_utils_init.c philo.c ft_init_struct.c ft_print_utils.c routine_philo.c
+SRC = ft_utils_init.c philo.c ft_init_struct.c ft_print_utils.c routine_philo.c \
+	ft_utils_routine.c monitoring.c free.c
 
 SRCF = $(addprefix $(SRC_DIR), $(SRC))
 OBJ = $(addprefix $(OBJ_DIR), $(SRC:%.c=%.o))
@@ -61,16 +61,13 @@ DEP = $(OBJ:%.o=%.d)
 
 all : $(NAME)
 
-.SILENT : $(NAME) $(NAME_A) $(OBJ) $(OBJ_DIR) $(SRC) $(SRC_DIR) $(DEP) $(DEP_DIR)
-	$(CLEAN) $(F_CLEAN)
+.SILENT : $(NAME) $(OBJ) $(OBJ_DIR) $(SRC) $(SRC_DIR) $(DEP) $(DEP_DIR)
+	$(CLEAN) $(F_CLEAN) $(RM)
 
-$(NAME) : $(NAME_A) $(OBJ)
+$(NAME) : $(OBJ)
 	echo "${CYAN}Compiling Philosophers...${RESET}"
-	$(CC) $(CFLAGS) $(OBJ) $(NAME_A) -o $@
+	$(CC) $(CFLAGS) $(OBJ) -o $@
 	echo "${GREEN}Succes!!!${RESET}"
-
-$(NAME_A) : $(OBJ)
-	ar rc $(NAME_A) $(OBJ)
 
 $(OBJ_DIR)%.o : $(SRC_DIR)%.c | $(OBJ_DIR) $(DEP_DIR)
 	$(CC) $(CFLAGS) -MMD -MP -c $< -o $@ -MF $(DEP_DIR)$*.d
@@ -88,9 +85,9 @@ clean:
 	@echo "${GREEN}Succes!!!${RESET}"
 
 fclean: clean
-	echo "${RED}Cleaning executable files...${RESET}"
-	rm -f $(NAME_A) $(NAME)
-	echo "${GREEN}Succes!!!${RESET}"
+	@echo "${RED}Cleaning executable files...${RESET}"
+	$(RM) $(NAME)
+	@echo "${GREEN}Succes!!!${RESET}"
 
 re : fclean all
 
