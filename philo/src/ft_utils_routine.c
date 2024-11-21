@@ -60,10 +60,10 @@ void	ft_usleep(size_t time_ms, t_input *input)
 	size_t	start_time;
 
 	start_time = get_current_time_ms();
-	while ((get_current_time_ms() - start_time) <= time_ms)
+	while ((get_current_time_ms() - start_time) < time_ms)
 	{
 		if (dead_philo(input->indiv) == -1)
 			return ;
-		usleep(100);
+		usleep(500);
 	}
 }

@@ -66,6 +66,7 @@ int	fill_struct_philo(t_input *input)
 			input->indiv[i].right_fork = &input->indiv[i + 1].left_fork;
 		pthread_mutex_init(&input->indiv[i].left_fork, NULL);
 		pthread_mutex_init(&input->indiv[i].eat_lock, NULL);
+		pthread_mutex_init(input->indiv[i].right_fork, NULL);
 		input->indiv[i].input = input;
 		input->indiv[i].start_time = get_current_time_ms();
 		i++;

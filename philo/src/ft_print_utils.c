@@ -28,6 +28,8 @@ void	print_output_message(t_philo *data, int indiv, char *status)
 		return ;
 	pthread_mutex_lock(&data->input->print_lock);
 	time = get_current_time_ms() - data->start_time;
+	if (dead_philo(data) == -1)
+		print_dead(data, indiv, "died");
 	printf("%ld %d %s\n", time, indiv, status);
 	pthread_mutex_unlock(&data->input->print_lock);
 }

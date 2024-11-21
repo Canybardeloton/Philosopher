@@ -34,9 +34,9 @@ int	philo_died(t_philo *indiv)
 			return (-1);
 		if (dead_monitoring(&indiv[i]) == -1)
 		{
-			pthread_mutex_lock(&indiv->input->dead_lock);
+			pthread_mutex_lock(&indiv[i].input->dead_lock);
 			indiv[0].input->dead_status = 1;
-			pthread_mutex_unlock(&indiv->input->dead_lock);
+			pthread_mutex_unlock(&indiv[i].input->dead_lock);
 			return (-1);
 		}
 		i++;
@@ -61,8 +61,11 @@ int	eat_reached(t_philo *indiv)
 		pthread_mutex_unlock(&indiv[i].eat_lock);
 		i++;
 	}
-	if (complete_meals == indiv->input->nb_philo)
+	if (complete_meals >= indiv->input->nb_philo)
 	{
+		printf("indiv[0].nb_times_eat %ld\n", indiv[0].nb_times_eat);
+		printf("indiv->input->nb_eat %d\n", indiv->input->nb_eat);
+		printf("complete_meals %d\n", complete_meals);
 		pthread_mutex_lock(&indiv[0].input->dead_lock);
 		indiv[0].input->dead_status = 1;
 		pthread_mutex_unlock(&indiv[0].input->dead_lock);
@@ -80,14 +83,14 @@ void	*monitoring(void *arg)
 		return (NULL);
 	while (1)
 	{
-		if (philo_died(indiv) == -1)
-		{
-			print_dead(indiv, indiv->philo_id, "died");
-			break ;
-		}
 		if (eat_reached(indiv) == -1)
 		{
 			print_all_eat(indiv);
+			break ;
+		}
+		if (philo_died(indiv) == -1)
+		{
+			print_dead(indiv, indiv->philo_id, "died");
 			break ;
 		}
 		usleep(100);

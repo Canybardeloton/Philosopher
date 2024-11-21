@@ -45,7 +45,7 @@ void	print_eat_routine(t_philo *indiv)
 		return ;
 	pthread_mutex_lock(&indiv->eat_lock);
 	print_output_message(indiv, indiv->philo_id, "is eating");
-	indiv->time_stamp = get_current_time_ms();
+		indiv->time_stamp = get_current_time_ms();
 	indiv->nb_times_eat += 1;
 	pthread_mutex_unlock(&indiv->eat_lock);
 	ft_usleep(indiv->input->time_eat, indiv->input);
@@ -64,7 +64,7 @@ void	eat_routine(t_philo *indiv)
 	print_output_message(indiv, indiv->philo_id, "is eating");
 	pthread_mutex_lock(&indiv->eat_lock);
 	indiv->time_stamp = get_current_time_ms();
-	indiv->nb_times_eat += 1;
+	indiv[0].nb_times_eat += 1;
 	pthread_mutex_unlock(&indiv->eat_lock);
 	ft_usleep(indiv->input->time_eat, indiv->input);
 	if (indiv->philo_id % 2 == 0)
@@ -97,7 +97,7 @@ void	*complete_routine(void *arg)
 	if (dead_philo(indiv) == -1)
 		return (NULL);
 	if (indiv->philo_id % 2 == 0)
-		ft_usleep(1, indiv->input);
+		ft_usleep(100, indiv->input);
 	while (1)
 	{
 		if (dead_philo(indiv) == -1)

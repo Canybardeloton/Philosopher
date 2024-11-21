@@ -20,6 +20,7 @@ void	free_everything(t_input *input)
 	while (i < input->nb_philo)
 	{
 		pthread_mutex_destroy(input->indiv[i].right_fork);
+		pthread_mutex_destroy(&input->indiv[i].left_fork);
 		pthread_mutex_destroy(&input->indiv[i].eat_lock);
 		i++;
 	}
