@@ -85,7 +85,7 @@ void	odd_philo(t_philo *indiv);
 void	ft_usleep(size_t ms, t_input *input);
 
 //monitoring.c
-int		dead_monitoring(t_philo *indiv);
+int		dead_monitoring(t_philo *indiv, int i);
 int		philo_died(t_philo *indiv);
 void	*monitoring(void *arg);
 

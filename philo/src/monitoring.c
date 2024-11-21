@@ -12,14 +12,14 @@
 
 #include "../includes/philo.h"
 
-int	dead_monitoring(t_philo *indiv)
+int	dead_monitoring(t_philo *indiv, int i)
 {
 	if (dead_philo(indiv) == -1)
 		return (-1);
-	pthread_mutex_lock(&indiv->eat_lock);
-	if (get_current_time_ms() - indiv->time_stamp >= indiv->input->time_die)
+	pthread_mutex_lock(&indiv[i].eat_lock);
+	if (get_current_time_ms() - indiv[i].time_stamp >= indiv->input->time_die)
 		return (pthread_mutex_unlock(&indiv->eat_lock), -1);
-	pthread_mutex_unlock(&indiv->eat_lock);
+	pthread_mutex_unlock(&indiv[i].eat_lock);
 	return (0);
 }
 
@@ -30,13 +30,11 @@ int	philo_died(t_philo *indiv)
 	i = 0;
 	while (i < indiv->input->nb_philo)
 	{
-		if (dead_philo(indiv) == -1)
-			return (-1);
-		if (dead_monitoring(&indiv[i]) == -1)
+		if (dead_monitoring(&indiv[i], i) == -1)
 		{
-			pthread_mutex_lock(&indiv[i].input->dead_lock);
+			pthread_mutex_lock(&indiv[0].input->dead_lock);
 			indiv[0].input->dead_status = 1;
-			pthread_mutex_unlock(&indiv[i].input->dead_lock);
+			pthread_mutex_unlock(&indiv[0].input->dead_lock);
 			return (-1);
 		}
 		i++;
@@ -63,9 +61,6 @@ int	eat_reached(t_philo *indiv)
 	}
 	if (complete_meals >= indiv->input->nb_philo)
 	{
-		printf("indiv[0].nb_times_eat %ld\n", indiv[0].nb_times_eat);
-		printf("indiv->input->nb_eat %d\n", indiv->input->nb_eat);
-		printf("complete_meals %d\n", complete_meals);
 		pthread_mutex_lock(&indiv[0].input->dead_lock);
 		indiv[0].input->dead_status = 1;
 		pthread_mutex_unlock(&indiv[0].input->dead_lock);
@@ -93,7 +88,7 @@ void	*monitoring(void *arg)
 			print_dead(indiv, indiv->philo_id, "died");
 			break ;
 		}
-		usleep(100);
+		ft_usleep(100, indiv->input);
 	}
 	return (NULL);
 }
