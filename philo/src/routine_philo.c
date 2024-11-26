@@ -6,7 +6,7 @@
 /*   By: agiliber <agiliber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 13:21:41 by agiliber          #+#    #+#             */
-/*   Updated: 2024/11/21 15:39:40 by agiliber         ###   ########.fr       */
+/*   Updated: 2024/11/25 11:22:01 by agiliber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,18 +37,6 @@ int	philo_simulation(t_input *input)
 		i++;
 	}
 	return (0);
-}
-
-void	print_eat_routine(t_philo *indiv)
-{
-	if (dead_philo(indiv) == -1)
-		return ;
-	pthread_mutex_lock(&indiv->eat_lock);
-	print_output_message(indiv, indiv->philo_id, "is eating");
-	indiv->time_stamp = get_current_time_ms();
-	indiv->nb_times_eat += 1;
-	pthread_mutex_unlock(&indiv->eat_lock);
-	ft_usleep(indiv->input->time_eat, indiv->input);
 }
 
 void	eat_routine(t_philo *indiv)
@@ -101,6 +89,7 @@ void	*complete_routine(void *arg)
 		if (dead_philo(indiv) == -1)
 			break ;
 		sleep_think_routine(indiv);
+		ft_usleep(1, indiv->input);
 	}
 	return (arg);
 }

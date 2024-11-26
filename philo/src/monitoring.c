@@ -6,7 +6,7 @@
 /*   By: agiliber <agiliber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 13:51:04 by agiliber          #+#    #+#             */
-/*   Updated: 2024/11/21 15:43:23 by agiliber         ###   ########.fr       */
+/*   Updated: 2024/11/26 12:22:55 by agiliber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,17 +53,17 @@ int	eat_reached(t_philo *indiv)
 		return (0);
 	while (i < indiv->input->nb_philo)
 	{
-		pthread_mutex_lock(&indiv[i].eat_lock);
+		pthread_mutex_lock(&indiv->eat_lock);
 		if (indiv[i].nb_times_eat >= indiv->input->nb_eat)
 			complete_meals++;
-		pthread_mutex_unlock(&indiv[i].eat_lock);
+		pthread_mutex_unlock(&indiv->eat_lock);
 		i++;
 	}
 	if (complete_meals >= indiv->input->nb_philo)
 	{
-		pthread_mutex_lock(&indiv[0].input->dead_lock);
+		pthread_mutex_lock(&indiv->input->dead_lock);
 		indiv[0].input->dead_status = 1;
-		pthread_mutex_unlock(&indiv[0].input->dead_lock);
+		pthread_mutex_unlock(&indiv->input->dead_lock);
 		return (-1);
 	}
 	return (0);
